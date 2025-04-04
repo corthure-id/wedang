@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="id">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Undangan Naufal & Wulandari</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Roboto&display=swap" rel="stylesheet">
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-app-compat.js"></script>
+  <script src="https://www.gstatic.com/firebasejs/9.6.1/firebase-database-compat.js"></script>
+  <style>
+    * { margin: 0; padding: 0; box-sizing: border-box; }
+    body { font-family: 'Roboto', sans-serif; background: url('https://i.ibb.co/qmXGfZh/wa-wallpaper.png') repeat; background-size: cover; display: flex; justify-content: center; align-items: center; height: 100vh; }
+    .wa-container { width: 375px; height: 667px; background-color: #ece5dd; border-radius: 20px; overflow: hidden; display: flex; flex-direction: column; box-shadow: 0 0 10px rgba(0,0,0,0.3); position: relative; }
+    .header { background-color: #075e54; color: white; padding: 10px; display: flex; align-items: center; justify-content: space-between; }
+    .header img { width: 40px; height: 40px; border-radius: 50%; margin-right: 10px; }
+    .header .info { display: flex; flex-direction: column; }
+    .chat-page, .profile-group { flex: 1; overflow-y: auto; padding: 10px; display: none; }
+    .chat-page.active, .profile-group.active { display: flex; flex-direction: column; }
+    .chat-window { flex: 1; overflow-y: auto; padding-bottom: 60px; }
+    .message { background: #dcf8c6; padding: 8px 12px; margin: 6px 10px; border-radius: 7.5px; max-width: 75%; line-height: 1.4; font-size: 14px; position: relative; }
+    .message.you { background: #ffffff; align-self: flex-end; }
+    .message.auto { background: #e1ffc7; font-style: italic; }
+    .chat-input { position: absolute; bottom: 0; width: 100%; display: flex; align-items: center; background-color: #f0f0f0; padding: 5px 10px; box-sizing: border-box; }
+    .chat-input input, .chat-input textarea { flex: 1; padding: 8px 12px; border-radius: 20px; border: 1px solid #ccc; font-size: 14px; resize: none; }
+    .chat-input button { background: #25d366; color: white; border: none; border-radius: 50%; padding: 10px; margin-left: 8px; cursor: pointer; }
+    .profile-group { background-color: #ffffff; padding: 15px; font-size: 14px; }
+    .profile-group h2 { color: #075e54; margin-bottom: 10px; text-align: center; }
+    .profile-group video { width: 100%; border-radius: 10px; margin: 10px 0; }
+    .profile-group .description { margin: 10px 0; color: #333; line-height: 1.6; }
+    .profile-group .media-links a { display: block; color: #25d366; margin: 5px 0; text-decoration: none; }
+    .profile-group .members { display: flex; flex-wrap: wrap; gap: 10px; justify-content: center; margin-top: 10px; }
+    .profile-group .member { text-align: center; font-size: 12px; }
+    .profile-group .member img { width: 50px; height: 50px; border-radius: 50%; }
+    .btn { background: #075e54; color: white; padding: 6px 12px; border: none; border-radius: 5px; cursor: pointer; font-size: 12px; }
+  </style>
+</head>
+<body>
+  <audio autoplay loop hidden>
+    <source src="https://cdn.islamicmedia.my/audio/Muhammad_Al_Muqit_-_Wedding_Nasheed.mp3" type="audio/mpeg">
+  </audio>
+  <div class="wa-container">
+    <div class="header">
+      <div style="display: flex; align-items: center;">
+        <img src="https://cdn-icons-png.flaticon.com/512/4086/4086679.png" alt="grup">
+        <div class="info">
+          <strong>Desa Suka Hati</strong>
+          <small>25 peserta</small>
+        </div>
+      </div>
+      <button onclick="showProfile()" class="btn">...</button>
+    </div>
+    <div id="chatPage" class="chat-page active">
+      <div class="chat-window" id="chatWindow">
+        <div class="message">🟢 Naufal Husainy mengirim pesan<br><br>📩<br><strong>بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ</strong><br>Assalamu’alaikum warahmatullahi wabarakatuh<br><br>Di antara jutaan langkah, Allah takdirkan dua jiwa berjalan saling mendekat. Dalam diam, doa mengudara. Dalam sabar, waktu menguji rasa. Dan kini, atas izin-Nya... aku, Naufal Husainy, insyaaAllah akan menjemput separuh agama bersama dia yang Allah pilihkan — Yunita Wulandari 🕊️<br><br>Dengan segala kerendahan hati, aku mengundangmu untuk jadi saksi hari bahagia kami. Bukan hanya sebagai tamu, tapi juga sebagai doa yang hadir dalam perjalanan ini.<br><br>Jangan buru-buru close chat ya... scroll pelan-pelan, karena setiap detil undangan ini kami siapkan dari hati. 🤍<br><br>— Naufal Mempelai pria</div>
+        <div class="message">🟢 Yunita Wulandari mengirim pesan<br><br>📩<br><strong>بِسْمِ اللّٰهِ الرَّحْمٰنِ الرَّحِيْمِ</strong><br>Assalamu’alaikum warahmatullahi wabarakatuh<br><br>Katanya, jodoh itu seperti doa yang tak pernah lelah mengetuk langit. Dan aku... pernah menyebut satu nama dalam sujud terpanjangku. Ternyata, Allah jawab dengan cara yang tak terduga — lewat laki-laki yang kini kucinta karena-Nya, Naufal Husainy 💌<br><br>Perjalanan ini bukan sekadar tentang dua nama. Tapi tentang niat, keberanian, dan tawakal untuk memulai ibadah panjang bernama pernikahan.<br><br>Dengan penuh rasa syukur, aku mengajakmu jadi bagian dari hari istimewa kami. Bukan hanya menyaksikan, tapi juga mengiringi dengan doa terbaik.<br><br>Yuk, intip lebih lanjut undangannya... Ada cinta, ada cerita, dan semoga ada kamu di dalamnya 🤍✨<br><br>— Yunita Mempelai wanita</div>
+      </div>
+      <div class="chat-input">
+        <input type="text" id="nameInput" placeholder="Nama Anda" />
+        <textarea id="userInput" placeholder="Tulis pesan..."></textarea>
+        <button onclick="sendMessage()">➤</button>
+      </div>
+    </div>
+    <div id="profilePage" class="profile-group">
+      <button class="btn" onclick="showChat()">⬅ Kembali ke Chat</button>
+      <h2>Profil Grup</h2>
+      <video controls>
+        <source src="" type="video/mp4"> Video tidak tersedia.
+      </video>
+      <div class="description">
+        <p><strong>🗓️ Akad:</strong> 20 Juni 2026 Pukul 07.00 s/d selesai<br>
+        <strong>🥂 Walimah:</strong> 20 Juni 2026 Pukul 08.00 s/d selesai<br>
+        <strong>📍 Lokasi:</strong> Lapangan Jl. Perumahan Terang Sari Blok E8, Cibalongsari, Kec. Klari, Karawang, Jawa Barat 41371<br>
+        <a href="https://maps.app.goo.gl/gD9rfvsmbAqBqTnN8" target="_blank">🔗 Lihat di Google Maps</a></p>
+      </div>
+      <div class="media-links">
+        <a href="#">📷 Foto Pre-Wedding</a>
+        <a href="#">📄 Dokumen Penting</a>
+      </div>
+      <div class="members">
+        <div class="member"><img src="https://i.pravatar.cc/50?u=1"><div>Ayah Naufal</div></div>
+        <div class="member"><img src="https://i.pravatar.cc/50?u=2"><div>Ibu Naufal</div></div>
+        <div class="member"><img src="https://i.pravatar.cc/50?u=3"><div>Ayah Yunita</div></div>
+        <div class="member"><img src="https://i.pravatar.cc/50?u=4"><div>Ibu Yunita</div></div>
+        <div class="member"><img src="https://i.pravatar.cc/50?u=5"><div>Pak Ustad</div></div>
+        <div class="member"><img src="https://i.pravatar.cc/50?u=6"><div>Pak RT</div></div>
+        <div class="member"><img src="https://i.pravatar.cc/50?u=7"><div>Pak Kades</div></div>
+        <div class="member"><img src="https://i.pravatar.cc/50?u=8"><div>Pak Duktur</div></div>
+        <div class="member"><img src="https://i.pravatar.cc/50?u=9"><div>Mudir Makarim</div></div>
+      </div>
+    </div>
+  </div>
+  <script>
+    const firebaseConfig = {
+      apiKey: "AIzaSyD1XwBdnFcs9YJY2nQMFYB3nSvoHJjU6Sc",
+      authDomain: "naufal-wulandari.firebaseapp.com",
+      databaseURL: "https://naufal-wulandari-default-rtdb.firebaseio.com",
+      projectId: "naufal-wulandari",
+      storageBucket: "naufal-wulandari.appspot.com",
+      messagingSenderId: "369810340894",
+      appId: "1:369810340894:web:ad1554a40f5e87b57f801d"
+    };
+    firebase.initializeApp(firebaseConfig);
+    const db = firebase.database();
+    const chatWindow = document.getElementById("chatWindow");
+
+    db.ref("messages").on("child_added", snapshot => {
+      const msg = snapshot.val();
+      const div = document.createElement("div");
+      div.className = msg.name === "auto-reply" ? "message auto" : "message you";
+      div.innerText = `${msg.name}: ${msg.text}`;
+      chatWindow.appendChild(div);
+      chatWindow.scrollTop = chatWindow.scrollHeight;
+    });
+
+    function sendMessage() {
+      const name = document.getElementById("nameInput").value.trim();
+      const text = document.getElementById("userInput").value.trim();
+      if (name && text) {
+        db.ref("messages").push({ name, text });
+        setTimeout(() => {
+          db.ref("messages").push({ name: "auto-reply", text: "🤵 Terima kasih atas doanya!" });
+        }, 1000);
+        document.getElementById("userInput").value = "";
+      }
+    }
+
+    function showProfile() {
+      document.getElementById("chatPage").classList.remove("active");
+      document.getElementById("profilePage").classList.add("active");
+    }
+
+    function showChat() {
+      document.getElementById("profilePage").classList.remove("active");
+      document.getElementById("chatPage").classList.add("active");
+    }
+  </script>
+</body>
+</html>
